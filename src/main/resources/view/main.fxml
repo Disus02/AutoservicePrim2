@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="993.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sapteh.controller.MainController">
+   <children>
+      <TableView fx:id="tableClient" layoutX="2.0" layoutY="2.0" prefHeight="273.0" prefWidth="985.0">
+        <columns>
+          <TableColumn fx:id="columnID" prefWidth="43.0" text="Id" />
+          <TableColumn fx:id="columnGender" prefWidth="87.0" text="Пол" />
+            <TableColumn fx:id="columnLastName" prefWidth="111.0" text="Фамилия" />
+            <TableColumn fx:id="columnFirstName" prefWidth="98.0" text="Имя" />
+            <TableColumn fx:id="columnPatronymic" prefWidth="87.0" text="Отчество" />
+            <TableColumn fx:id="columnBirthday" prefWidth="100.0" text="Дата рождения" />
+            <TableColumn fx:id="columnPhone" prefWidth="63.0" text="Телефон" />
+            <TableColumn fx:id="columnEmail" prefWidth="83.0" text="Email" />
+            <TableColumn fx:id="columnDataReg" prefWidth="123.0" text="Дата регистрации" />
+            <TableColumn fx:id="columnDataLastVisit" prefWidth="189.0" text="Дата последнего посещения" />
+        </columns>
+      </TableView>
+   </children>
+</Pane>

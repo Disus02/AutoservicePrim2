@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/avtoservice?serverTimezone=UTC</property>
+        <property name="hibernate.connection.username">user</property>
+        <property name="hibernate.connection.password">1234</property>
+
+        <!--Create table ddl code hibernate-->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!--Show sql code-->
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <property name="use_sql_comments">true</property>
+
+        <mapping class="ru.sapteh.model.Client"/>
+        <mapping class="ru.sapteh.model.ClientService"/>
+        <mapping class="ru.sapteh.model.Gender"/>
+        <mapping class="ru.sapteh.model.Service"/>
+    </session-factory>
+</hibernate-configuration>
