@@ -3,7 +3,10 @@ package ru.sapteh.controller;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -43,7 +46,10 @@ public class MainController {
     private TableColumn<Client,Date> columnDataReg;
     @FXML
     private TableColumn<Client,Date> columnDataLastVisit;
-
+    @FXML
+    private Label status;
+    private int sizeClients;
+    private int sizeList;
     @FXML
     public void initialize(){
         getList(clients);
@@ -56,22 +62,54 @@ public class MainController {
     columnPhone.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getPhone()));
     columnEmail.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getEmail()));
     columnDataReg.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getRegistrationDate()));
-    columnDataLastVisit.setCellValueFactory(c->
-            new SimpleObjectProperty<>(c.getValue().getServices().stream()
-                    .min(Comparator.comparing(ClientService::getStartTime)).get().getStartTime()));
+//    columnDataLastVisit.setCellValueFactory(c->
+//            new SimpleObjectProperty<>(c.getValue().getServices().stream().min(Comparator.comparing(ClientService::getStartTime)).get().getStartTime()));
     tableClient.setItems(clients);
 
+    }
+    @FXML
+    public void pressTen(ActionEvent event){
+        cutRows();
+        getList(clients);
+        sizeClients=clients.size();
+        String str=((RadioButton)event.getSource()).getText();
+        for (int i = Integer.parseInt(str); i < clients.size(); i++) {
+            clients.remove(i--);
+        }
+        sizeList=clients.size();
+        status.setText(String.format("%d из %d",sizeList,sizeClients));
+    }
+    @FXML
+    public void pressFifty(ActionEvent event){
+        cutRows();
+        getList(clients);
+        sizeClients=clients.size();
+        String str=((RadioButton)event.getSource()).getText();
+        for (int i = Integer.parseInt(str); i < clients.size(); i++) {
+            clients.remove(i--);
+        }
+        sizeList=clients.size();
+        status.setText(String.format("%d из %d",sizeList,sizeClients));
 
-
+    }
+    @FXML
+    public void pressAll(ActionEvent event){
+        cutRows();
+        getList(clients);
+        status.setText(String.format("%d из %d",clients.size(),clients.size()));
 
     }
 
     private static void getList(ObservableList<Client> clients){
         SessionFactory factory=new Configuration().configure().buildSessionFactory();
         Dao<Client, Integer> clientDao=new ClientDaoImpl(factory);
-//        System.out.println(clientDao.readByAll());
         clients.addAll(clientDao.readByAll());
         factory.close();
+    }
+    private void cutRows() {
+        for (int i = 0; i < clients.size(); i++) {
+            clients.remove(i--);
+        }
     }
 
 }

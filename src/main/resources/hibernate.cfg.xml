@@ -5,9 +5,9 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/avtoservice?serverTimezone=UTC</property>
-        <property name="hibernate.connection.username">user</property>
-        <property name="hibernate.connection.password">1234</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/autoservice?serverTimezone=UTC</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">2216</property>
 
         <!--Create table ddl code hibernate-->
         <property name="hibernate.hbm2ddl.auto">update</property>

@@ -19,5 +19,9 @@
             <TableColumn fx:id="columnDataLastVisit" prefWidth="189.0" text="Дата последнего посещения" />
         </columns>
       </TableView>
+      <RadioButton layoutX="47.0" layoutY="285.0" mnemonicParsing="false" onAction="#pressTen" text="10" />
+      <RadioButton layoutX="153.0" layoutY="285.0" mnemonicParsing="false" onAction="#pressFifty" text="50" />
+      <RadioButton layoutX="259.0" layoutY="285.0" mnemonicParsing="false" onAction="#pressAll" text="Все" />
+      <Label fx:id="status" layoutX="838.0" layoutY="294.0" />
    </children>
 </Pane>
