@@ -20,7 +20,6 @@ public class Gender {
 
     @Override
     public String toString() {
-        return "code=" + code +
-                "name='" + name + '\'';
+        return String.format("%s",code);
     }
 }

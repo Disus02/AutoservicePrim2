@@ -2,10 +2,11 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="993.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sapteh.controller.MainController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sapteh.controller.MainController">
    <children>
-      <TableView fx:id="tableClient" layoutX="2.0" layoutY="2.0" prefHeight="273.0" prefWidth="985.0">
+      <TableView fx:id="tableClient" layoutX="3.0" layoutY="2.0" prefHeight="273.0" prefWidth="1052.0">
         <columns>
           <TableColumn fx:id="columnID" prefWidth="43.0" text="Id" />
           <TableColumn fx:id="columnGender" prefWidth="87.0" text="Пол" />
@@ -17,11 +18,20 @@
             <TableColumn fx:id="columnEmail" prefWidth="83.0" text="Email" />
             <TableColumn fx:id="columnDataReg" prefWidth="123.0" text="Дата регистрации" />
             <TableColumn fx:id="columnDataLastVisit" prefWidth="189.0" text="Дата последнего посещения" />
+            <TableColumn fx:id="columnSizeVisit" prefWidth="78.0" text="Кол-во посещений" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
       <RadioButton layoutX="47.0" layoutY="285.0" mnemonicParsing="false" onAction="#pressTen" text="10" />
       <RadioButton layoutX="153.0" layoutY="285.0" mnemonicParsing="false" onAction="#pressFifty" text="50" />
       <RadioButton layoutX="259.0" layoutY="285.0" mnemonicParsing="false" onAction="#pressAll" text="Все" />
       <Label fx:id="status" layoutX="838.0" layoutY="294.0" />
+      <Button fx:id="buttonOpenAdd" layoutX="453.0" layoutY="295.0" mnemonicParsing="false" onAction="#openAddClient" prefHeight="32.0" prefWidth="136.0" text="добавить клиента">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
    </children>
 </Pane>
