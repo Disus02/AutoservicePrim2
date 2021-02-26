@@ -55,65 +55,48 @@ public class MainController {
     @FXML
     private Label status;
     @FXML
+    private TextField txtSearch;
+    @FXML
+    private ComboBox<Integer> comboPaged;
+    @FXML
+    private Pagination pagination;
+    @FXML
     private Button buttonOpenAdd;
     private int sizeClients;
-    private int sizeList;
+    private int comboBoxValue;
+
     @FXML
     public void initialize(){
         getList(clients);
-    columnID.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getId()));
-    columnGender.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getGender().getCode()));
-    columnLastName.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getLastName()));
-    columnFirstName.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getFirstName()));
-    columnPatronymic.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getPatronymic()));
-    columnBirthday.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getBirthday()));
-    columnPhone.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getPhone()));
-    columnEmail.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getEmail()));
-    columnDataReg.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getRegistrationDate()));
-    columnDataLastVisit.setCellValueFactory(c->{
-        Set<ClientService> clientServicesSet=c.getValue().getServices();
-        String str="";
-        if (clientServicesSet.size() !=0) {
-            Date date=clientServicesSet.stream().max(Comparator.comparing(ClientService::getStartTime)).get().getStartTime();
-            str=new SimpleDateFormat("dd.MM.yyyy").format(date);
+        initializeTableView();
+        sizeClients=clients.size();
+        status.setText(String.format("Кол-во записей: %d",sizeClients));
+    ObservableList<Integer> options=FXCollections.observableArrayList(10,20,50,200);
+    comboPaged.setItems(options);
+    comboPaged.setValue(options.get(0));
+    comboPaged.valueProperty().addListener((obj,oldValue,newValue)-> {
+
+        comboBoxValue = comboPaged.getValue();
+        if (comboBoxValue>sizeClients){
+            comboBoxValue=sizeClients;
+            newValue=sizeClients;
         }
-        return new SimpleObjectProperty<>(str);
+        int page=(int) Math.ceil(sizeClients * 1.0/comboBoxValue);
+        pagination.setPageCount(page);
+        pagination.setCurrentPageIndex(0);
+        tableClient.setItems(FXCollections.observableArrayList(clients.subList(pagination.getCurrentPageIndex(),newValue)));
+        pagination.currentPageIndexProperty().addListener((obj1,oldValue1,newValue1)->{
+            try {
+                tableClient.setItems(FXCollections.observableArrayList(clients.subList(comboBoxValue * (newValue1.intValue() + 1) - comboBoxValue,
+                        comboBoxValue * (newValue1.intValue() + 1))));
+                System.out.println(comboBoxValue * (newValue1.intValue() + 1) - comboBoxValue + "  " +
+                        comboBoxValue * (newValue1.intValue() + 1));
+            }catch (IndexOutOfBoundsException exception){
+                tableClient.setItems(FXCollections.observableArrayList(clients.subList(comboBoxValue * (newValue1.intValue() + 1) - comboBoxValue,
+                        sizeClients)));
+            }
+            });
     });
-    columnSizeVisit.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getServices().size()));
-    tableClient.setItems(clients);
-
-    }
-    @FXML
-    public void pressTen(ActionEvent event){
-        cutRows();
-        getList(clients);
-        sizeClients=clients.size();
-        String str=((RadioButton)event.getSource()).getText();
-        for (int i = Integer.parseInt(str); i < clients.size(); i++) {
-            clients.remove(i--);
-        }
-        sizeList=clients.size();
-        status.setText(String.format("%d из %d",sizeList,sizeClients));
-    }
-    @FXML
-    public void pressFifty(ActionEvent event){
-        cutRows();
-        getList(clients);
-        sizeClients=clients.size();
-        String str=((RadioButton)event.getSource()).getText();
-        for (int i = Integer.parseInt(str); i < clients.size(); i++) {
-            clients.remove(i--);
-        }
-        sizeList=clients.size();
-        status.setText(String.format("%d из %d",sizeList,sizeClients));
-
-    }
-    @FXML
-    public void pressAll(ActionEvent event){
-        cutRows();
-        getList(clients);
-        status.setText(String.format("%d из %d",clients.size(),clients.size()));
-
     }
     @FXML
     public void openAddClient(ActionEvent event) throws IOException {
@@ -135,6 +118,28 @@ public class MainController {
         for (int i = 0; i < clients.size(); i++) {
             clients.remove(i--);
         }
+    }
+    private void initializeTableView(){
+        columnID.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getId()));
+        columnGender.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getGender().getCode()));
+        columnLastName.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getLastName()));
+        columnFirstName.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getFirstName()));
+        columnPatronymic.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getPatronymic()));
+        columnBirthday.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getBirthday()));
+        columnPhone.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getPhone()));
+        columnEmail.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getEmail()));
+        columnDataReg.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getRegistrationDate()));
+        columnDataLastVisit.setCellValueFactory(c->{
+            Set<ClientService> clientServicesSet=c.getValue().getServices();
+            String str="";
+            if (clientServicesSet.size() !=0) {
+                Date date=clientServicesSet.stream().max(Comparator.comparing(ClientService::getStartTime)).get().getStartTime();
+                str=new SimpleDateFormat("dd.MM.yyyy").format(date);
+            }
+            return new SimpleObjectProperty<>(str);
+        });
+        columnSizeVisit.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getServices().size()));
+        tableClient.setItems(clients);
     }
 
 }
