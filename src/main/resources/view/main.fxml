@@ -6,7 +6,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sapteh.controller.MainController">
    <children>
-      <TableView fx:id="tableClient" layoutX="3.0" layoutY="2.0" prefHeight="273.0" prefWidth="1052.0">
+      <TableView fx:id="tableClient" layoutX="3.0" layoutY="37.0" prefHeight="257.0" prefWidth="1052.0">
         <columns>
           <TableColumn fx:id="columnID" prefWidth="43.0" text="Id" />
           <TableColumn fx:id="columnGender" prefWidth="87.0" text="Пол" />
@@ -32,6 +32,6 @@
       </Button>
       <ComboBox fx:id="comboPaged" layoutX="55.0" layoutY="299.0" prefHeight="25.0" prefWidth="67.0" />
       <Pagination fx:id="pagination" layoutX="303.0" layoutY="331.0" prefHeight="50.0" prefWidth="311.0" />
-      <TextField fx:id="txtSearch" layoutX="173.0" layoutY="299.0" />
+      <TextField fx:id="txtSearch" layoutX="262.0" layoutY="12.0" />
    </children>
 </Pane>

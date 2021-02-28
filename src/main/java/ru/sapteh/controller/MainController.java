@@ -3,6 +3,8 @@ package ru.sapteh.controller;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -97,6 +99,7 @@ public class MainController {
             }
             });
     });
+    searchClient();
     }
     @FXML
     public void openAddClient(ActionEvent event) throws IOException {
@@ -140,6 +143,31 @@ public class MainController {
         });
         columnSizeVisit.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getServices().size()));
         tableClient.setItems(clients);
+    }
+    public void searchClient(){
+        FilteredList<Client> filterList = new FilteredList<>(clients, p -> true);
+        txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            filterList.setPredicate(client -> {
+                if (newValue == null || newValue.isEmpty()){
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+                if (client.getFirstName().toLowerCase().contains(lowerCaseFilter)){
+                    return true;
+                } else if (client.getLastName().toLowerCase().contains(lowerCaseFilter)){
+                    return true;
+                } else if (client.getPatronymic().toLowerCase().contains(lowerCaseFilter)){
+                    return true;
+                }
+                return false;
+            });
+        });
+
+// change SortedList to filterList
+        SortedList<Client> sortedList = new SortedList<>(filterList);
+        sortedList.comparatorProperty().bind(tableClient.comparatorProperty());
+        tableClient.setItems(sortedList);
+
     }
 
 }
