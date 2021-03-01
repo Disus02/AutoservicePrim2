@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sapteh.controller.AddUsersController">
+   <children>
+      <TextField fx:id="txtName" layoutX="253.0" layoutY="91.0" />
+      <TextField fx:id="txtLogin" layoutX="253.0" layoutY="141.0" />
+      <TextField fx:id="txtPassword" layoutX="253.0" layoutY="188.0" />
+      <Text layoutX="181.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+      <Text layoutX="181.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login" />
+      <Text layoutX="181.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+      <Text layoutX="181.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Role" />
+      <Button layoutX="402.0" layoutY="313.0" mnemonicParsing="false" onAction="#addUsers" text="Зарегистрировать" />
+      <Button fx:id="buttonToClose" layoutX="253.0" layoutY="313.0" mnemonicParsing="false" onAction="#pressClose" text="Закрыть" />
+      <ComboBox fx:id="comboRole" layoutX="252.0" layoutY="233.0" prefHeight="25.0" prefWidth="159.0" />
+      <Label fx:id="status" layoutX="417.0" layoutY="145.0" />
+   </children>
+</Pane>

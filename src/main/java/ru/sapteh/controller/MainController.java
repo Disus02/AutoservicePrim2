@@ -64,13 +64,22 @@ public class MainController {
     private Pagination pagination;
     @FXML
     private Button buttonOpenAdd;
+    @FXML
+    private Button openRegUser;
+
+
     private int sizeClients;
     private int comboBoxValue;
 
     @FXML
     public void initialize(){
+        if (LoginWindowController.role.equals("user")){
+            buttonOpenAdd.setVisible(false);
+            openRegUser.setVisible(false);
+        }
         getList(clients);
         initializeTableView();
+        searchClient(clients);
         sizeClients=clients.size();
         status.setText(String.format("Кол-во записей: %d",sizeClients));
     ObservableList<Integer> options=FXCollections.observableArrayList(10,20,50,200);
@@ -91,15 +100,12 @@ public class MainController {
             try {
                 tableClient.setItems(FXCollections.observableArrayList(clients.subList(comboBoxValue * (newValue1.intValue() + 1) - comboBoxValue,
                         comboBoxValue * (newValue1.intValue() + 1))));
-                System.out.println(comboBoxValue * (newValue1.intValue() + 1) - comboBoxValue + "  " +
-                        comboBoxValue * (newValue1.intValue() + 1));
             }catch (IndexOutOfBoundsException exception){
                 tableClient.setItems(FXCollections.observableArrayList(clients.subList(comboBoxValue * (newValue1.intValue() + 1) - comboBoxValue,
                         sizeClients)));
             }
             });
     });
-    searchClient();
     }
     @FXML
     public void openAddClient(ActionEvent event) throws IOException {
@@ -108,6 +114,15 @@ public class MainController {
         Stage stage=new Stage();
         stage.setScene(new Scene(root));
         stage.setTitle("Добавление клиента");
+        stage.show();
+    }
+    @FXML
+    public void pressRegUsers(ActionEvent event) throws IOException {
+        openRegUser.getScene().getWindow().hide();
+        Parent root=FXMLLoader.load(getClass().getResource("/view/addUsers.fxml"));
+        Stage stage=new Stage();
+        stage.setTitle("Регистрация пользователя");
+        stage.setScene(new Scene(root));
         stage.show();
     }
 
@@ -144,7 +159,7 @@ public class MainController {
         columnSizeVisit.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getServices().size()));
         tableClient.setItems(clients);
     }
-    public void searchClient(){
+    public void searchClient(ObservableList<Client> clients){
         FilteredList<Client> filterList = new FilteredList<>(clients, p -> true);
         txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> {
             filterList.setPredicate(client -> {
@@ -162,8 +177,6 @@ public class MainController {
                 return false;
             });
         });
-
-// change SortedList to filterList
         SortedList<Client> sortedList = new SortedList<>(filterList);
         sortedList.comparatorProperty().bind(tableClient.comparatorProperty());
         tableClient.setItems(sortedList);
