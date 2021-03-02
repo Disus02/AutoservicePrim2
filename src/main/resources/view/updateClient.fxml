@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sapteh.controller.UpdateClientController">
+   <children>
+      <TextField fx:id="txtId" layoutX="80.0" layoutY="63.0" />
+      <TextField fx:id="txtLastName" layoutX="80.0" layoutY="117.0" />
+      <TextField fx:id="txtFirstName" layoutX="80.0" layoutY="175.0" />
+      <TextField fx:id="txtPatronymic" layoutX="80.0" layoutY="226.0" />
+      <TextField fx:id="txtPhone" layoutX="80.0" layoutY="277.0" />
+      <DatePicker fx:id="pickerBirthday" layoutX="385.0" layoutY="117.0" />
+      <TextField fx:id="txtEmail" layoutX="385.0" layoutY="163.0" />
+      <Text layoutX="40.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Id" />
+      <Text layoutX="29.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Фамилия" />
+      <Text layoutX="29.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Имя" />
+      <Text layoutX="29.0" layoutY="243.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Отчество" />
+      <Text layoutX="29.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Телефон" />
+      <Text layoutX="285.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата рождения" />
+      <Text layoutX="328.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+      <Text layoutX="331.0" layoutY="235.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Пол" />
+      <Button layoutX="400.0" layoutY="321.0" mnemonicParsing="false" onAction="#updateClient" text="Изменить" />
+      <Button fx:id="buttonToClose" layoutX="259.0" layoutY="321.0" mnemonicParsing="false" onAction="#pressClose" text="Закрыть" />
+      <TextField fx:id="txtGender" layoutX="385.0" layoutY="218.0" />
+   </children>
+</AnchorPane>

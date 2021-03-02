@@ -14,6 +14,7 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NonNull
     private String name;
     @NonNull
     private String login;

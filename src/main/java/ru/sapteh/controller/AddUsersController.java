@@ -37,6 +37,7 @@ public class AddUsersController {
     private Button buttonToClose;
     @FXML
     private Label status;
+    private String login;
 
 
     @FXML
@@ -74,15 +75,19 @@ public class AddUsersController {
         SessionFactory factory=new Configuration().configure().buildSessionFactory();
         UsersDaoImpl usersDao=new UsersDaoImpl(factory);
         Users users=new Users();
-        users.setName(txtName.getText());
         for (Users users1: usersDao.readByAll()) {
-            if (!users1.getLogin().equals(txtLogin.getText())){
-                users.setLogin(txtLogin.getText());
-            }else status.setText("Логин занят");
+            if (users1.getLogin().equals(txtLogin.getText()))
+             login=users1.getLogin();
         }
-        users.setPassword(txtPassword.getText());
-        users.setRole(comboRole.getValue());
-        usersDao.create(users);
+        if (!login.equals(txtLogin.getText())){
+            users.setName(txtName.getText());
+            users.setLogin(txtLogin.getText());
+            users.setRole(comboRole.getValue());
+            users.setPassword(txtPassword.getText());
+            usersDao.create(users);
+            status.setText(String.format("Пользователь %s добавлен",users.getName()));
+        }else status.setText("Логин занят");
+
         factory.close();
     }
 }

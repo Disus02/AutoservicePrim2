@@ -20,16 +20,21 @@ import ru.sapteh.model.Client;
 import ru.sapteh.model.ClientService;
 import ru.sapteh.model.Gender;
 import ru.sapteh.service.ClientDaoImpl;
+import ru.sapteh.service.GenderService;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 public class MainController {
 
-    ObservableList<Client> clients= FXCollections.observableArrayList();
+    private final ObservableList<Client> clients= FXCollections.observableArrayList();
+    ObservableList<Character> genders=FXCollections.observableArrayList('м', 'ж');
     @FXML
     private TableView<Client> tableClient;
     @FXML
@@ -66,10 +71,24 @@ public class MainController {
     private Button buttonOpenAdd;
     @FXML
     private Button openRegUser;
-
+    @FXML
+    private ComboBox<String> comboFilter;
+    @FXML
+    private ComboBox<Character> comboGender;
+    @FXML
+    private Button openUpdateClient;
 
     private int sizeClients;
     private int comboBoxValue;
+
+    public static int idClient;
+    public static String firstName;
+    public static String lastName;
+    public static String patronymic;
+    public static String phone;
+    public static String email;
+    public static Date birthday;
+    public static char gender;
 
     @FXML
     public void initialize(){
@@ -79,34 +98,27 @@ public class MainController {
         }
         getList(clients);
         initializeTableView();
+        sortGender();
         searchClient(clients);
-        sizeClients=clients.size();
-        status.setText(String.format("Кол-во записей: %d",sizeClients));
-    ObservableList<Integer> options=FXCollections.observableArrayList(10,20,50,200);
-    comboPaged.setItems(options);
-    comboPaged.setValue(options.get(0));
-    comboPaged.valueProperty().addListener((obj,oldValue,newValue)-> {
+        pageTableView();
+        sortGender();
+        clientShowDetails(null);
+        tableClient.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                        clientShowDetails(newValue);
 
-        comboBoxValue = comboPaged.getValue();
-        if (comboBoxValue>sizeClients){
-            comboBoxValue=sizeClients;
-            newValue=sizeClients;
-        }
-        int page=(int) Math.ceil(sizeClients * 1.0/comboBoxValue);
-        pagination.setPageCount(page);
-        pagination.setCurrentPageIndex(0);
-        tableClient.setItems(FXCollections.observableArrayList(clients.subList(pagination.getCurrentPageIndex(),newValue)));
-        pagination.currentPageIndexProperty().addListener((obj1,oldValue1,newValue1)->{
-            try {
-                tableClient.setItems(FXCollections.observableArrayList(clients.subList(comboBoxValue * (newValue1.intValue() + 1) - comboBoxValue,
-                        comboBoxValue * (newValue1.intValue() + 1))));
-            }catch (IndexOutOfBoundsException exception){
-                tableClient.setItems(FXCollections.observableArrayList(clients.subList(comboBoxValue * (newValue1.intValue() + 1) - comboBoxValue,
-                        sizeClients)));
-            }
-            });
-    });
+                });
     }
+    @FXML
+    public void pressUpdateClient() throws IOException {
+        openUpdateClient.getScene().getWindow().hide();
+        Parent parent=FXMLLoader.load(getClass().getResource("/view/updateClient.fxml"));
+        Stage stage=new Stage();
+        stage.setTitle("Изменение клиета");
+        stage.setScene(new Scene(parent));
+        stage.show();
+    }
+
     @FXML
     public void openAddClient(ActionEvent event) throws IOException {
         buttonOpenAdd.getScene().getWindow().hide();
@@ -125,17 +137,40 @@ public class MainController {
         stage.setScene(new Scene(root));
         stage.show();
     }
+    private void pageTableView(){
+        sizeClients=clients.size();
+        ObservableList<Integer> options=FXCollections.observableArrayList(10,20,50,200);
+        comboPaged.setItems(options);
+        comboPaged.setValue(options.get(0));
+        comboPaged.valueProperty().addListener((obj,oldValue,newValue)-> {
 
+            comboBoxValue = comboPaged.getValue();
+            if (comboBoxValue>sizeClients){
+                comboBoxValue=sizeClients;
+                newValue=sizeClients;
+            }
+            int page=(int) Math.ceil(sizeClients * 1.0/comboBoxValue);
+            pagination.setPageCount(page);
+            pagination.setCurrentPageIndex(0);
+            int clientPage=FXCollections.observableArrayList(clients.subList(pagination.getCurrentPageIndex(),newValue)).size();
+            tableClient.setItems(FXCollections.observableArrayList(clients.subList(pagination.getCurrentPageIndex(),newValue)));
+            status.setText(String.format("кол-во записей %d из %d",clientPage,sizeClients));
+            pagination.currentPageIndexProperty().addListener((obj1,oldValue1,newValue1)->{
+                try {
+                    tableClient.setItems(FXCollections.observableArrayList(clients.subList(comboBoxValue * (newValue1.intValue() + 1) - comboBoxValue,
+                            comboBoxValue * (newValue1.intValue() + 1))));
+                }catch (IndexOutOfBoundsException exception){
+                    tableClient.setItems(FXCollections.observableArrayList(clients.subList(comboBoxValue * (newValue1.intValue() + 1) - comboBoxValue,
+                            sizeClients)));
+                }
+            });
+        });
+    }
     private static void getList(ObservableList<Client> clients){
         SessionFactory factory=new Configuration().configure().buildSessionFactory();
         Dao<Client, Integer> clientDao=new ClientDaoImpl(factory);
         clients.addAll(clientDao.readByAll());
         factory.close();
-    }
-    private void cutRows() {
-        for (int i = 0; i < clients.size(); i++) {
-            clients.remove(i--);
-        }
     }
     private void initializeTableView(){
         columnID.setCellValueFactory(c->new SimpleObjectProperty<>(c.getValue().getId()));
@@ -161,26 +196,77 @@ public class MainController {
     }
     public void searchClient(ObservableList<Client> clients){
         FilteredList<Client> filterList = new FilteredList<>(clients, p -> true);
-        txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            filterList.setPredicate(client -> {
-                if (newValue == null || newValue.isEmpty()){
-                    return true;
-                }
-                String lowerCaseFilter = newValue.toLowerCase();
-                if (client.getFirstName().toLowerCase().contains(lowerCaseFilter)){
-                    return true;
-                } else if (client.getLastName().toLowerCase().contains(lowerCaseFilter)){
-                    return true;
-                } else if (client.getPatronymic().toLowerCase().contains(lowerCaseFilter)){
-                    return true;
-                }
-                return false;
+        comboFilter.setItems(FXCollections.observableArrayList("FIO","phone","email"));
+            txtSearch.textProperty().addListener((obj, oldValue, newValue) -> {
+                filterList.setPredicate(client -> {
+                    if (newValue == null || newValue.isEmpty()){
+                        return true;
+                    }
+                    String lowerCaseFilter = newValue.toLowerCase();
+                    if (comboFilter.getValue().equals("FIO")){
+                        if (client.getFirstName().toLowerCase().contains(lowerCaseFilter)){
+                            return true;
+                        }
+                        else if (client.getLastName().toLowerCase().contains(lowerCaseFilter)){
+                            return true;
+                        } else if (client.getPatronymic().toLowerCase().contains(lowerCaseFilter)){
+                            return true;
+                        }
+                    }
+                    if (comboFilter.getValue().equals("phone")){
+                        if (client.getPhone().toLowerCase().contains(lowerCaseFilter)){
+                            return true;
+                        }
+                    }
+                    if (comboFilter.getValue().equals("email")){
+                        if (client.getEmail().toLowerCase().contains(lowerCaseFilter)){
+                            return true;
+                        }
+                    }
+                    return false;
+                });
             });
-        });
         SortedList<Client> sortedList = new SortedList<>(filterList);
         sortedList.comparatorProperty().bind(tableClient.comparatorProperty());
         tableClient.setItems(sortedList);
+    }
+
+    private void sortGender(){
+        comboGender.setItems(genders);
+        comboGender.valueProperty().addListener(
+                (obj, oldValue, newValue) -> {
+                    FilteredList<Client> filteredList = new FilteredList<>(
+                            clients, s -> newValue.equals(s.getGender().getCode()));
+                    tableClient.setItems(filteredList);
+                }
+        );
+    }
+    private void clientShowDetails(Client client){
+        if (client!=null){
+            idClient=client.getId();
+            firstName=client.getFirstName();
+            UpdateClientController.client.setFirstName(firstName);
+            lastName=client.getLastName();
+            UpdateClientController.client.setLastName(lastName);
+            patronymic=client.getPatronymic();
+            UpdateClientController.client.setPatronymic(patronymic);
+            phone=client.getPhone();
+            UpdateClientController.client.setPhone(phone);
+            email=client.getEmail();
+            UpdateClientController.client.setEmail(email);
+            UpdateClientController.client.setGender(client.getGender());
+            UpdateClientController.client.setBirthday(client.getBirthday());
+        }else
+            idClient=0;
+         firstName="";
+         lastName="";
+         patronymic="";
+         phone="";
+         email="";
+         birthday=null;
+        gender=0;
 
     }
+
 
 }

@@ -41,6 +41,13 @@ List<Users> usersList=new ArrayList<>();
     @FXML
     void pressOpen(ActionEvent event) throws IOException {
         getUsers();
+        if (txtLogin.getText().isEmpty()&&txtPassword.getText().isEmpty()) {
+            status.setText("Логин и пароль не заполнены");
+        }else if (txtLogin.getText().isEmpty()){
+            status.setText("Логин пустой");
+        }else if (txtPassword.getText().isEmpty()){
+            status.setText("Пароль пустой");
+        } else
         for (Users users:usersList) {
             if (users.getLogin().equals(txtLogin.getText())&&users.getPassword().equals(txtPassword.getText())){
                    role=users.getRole();
