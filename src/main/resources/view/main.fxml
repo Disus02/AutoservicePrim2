@@ -4,9 +4,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sapteh.controller.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sapteh.controller.MainController">
    <children>
-      <TableView fx:id="tableClient" layoutX="5.0" layoutY="51.0" prefHeight="257.0" prefWidth="1052.0">
+      <TableView fx:id="tableClient" layoutX="5.0" layoutY="51.0" prefHeight="257.0" prefWidth="1052.0" AnchorPane.bottomAnchor="92.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="51.0">
         <columns>
           <TableColumn fx:id="columnID" prefWidth="43.0" text="Id" />
           <TableColumn fx:id="columnGender" prefWidth="87.0" text="Пол" />
@@ -25,22 +25,23 @@
          </columnResizePolicy>
       </TableView>
       <Label fx:id="status" layoutX="838.0" layoutY="294.0" />
-      <Button fx:id="buttonOpenAdd" layoutX="838.0" layoutY="315.0" mnemonicParsing="false" onAction="#openAddClient" prefHeight="32.0" prefWidth="136.0" text="добавить клиента">
+      <Button fx:id="buttonOpenAdd" layoutX="838.0" layoutY="315.0" mnemonicParsing="false" onAction="#openAddClient" prefHeight="32.0" prefWidth="136.0" text="добавить клиента" AnchorPane.bottomAnchor="53.0" AnchorPane.leftAnchor="838.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="315.0">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <ComboBox fx:id="comboPaged" layoutX="54.0" layoutY="328.0" prefHeight="25.0" prefWidth="67.0" />
-      <Pagination fx:id="pagination" layoutX="303.0" layoutY="331.0" prefHeight="50.0" prefWidth="311.0" />
-      <TextField fx:id="txtSearch" layoutX="404.0" layoutY="14.0" />
-      <Button fx:id="openRegUser" layoutX="830.0" layoutY="356.0" mnemonicParsing="false" onAction="#pressRegUsers" text="Регистрация пользователя">
+      <ComboBox fx:id="comboPaged" layoutX="54.0" layoutY="328.0" prefHeight="25.0" prefWidth="67.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="54.0" AnchorPane.rightAnchor="941.0" AnchorPane.topAnchor="328.0" />
+      <Pagination fx:id="pagination" layoutX="303.0" layoutY="331.0" prefHeight="50.0" prefWidth="311.0" AnchorPane.bottomAnchor="19.0" AnchorPane.leftAnchor="303.0" AnchorPane.rightAnchor="448.0" AnchorPane.topAnchor="331.0" />
+      <TextField fx:id="txtSearch" layoutX="404.0" layoutY="14.0" AnchorPane.bottomAnchor="361.0" AnchorPane.leftAnchor="404.0" AnchorPane.rightAnchor="509.0" AnchorPane.topAnchor="14.0" />
+      <Button fx:id="openRegUser" layoutX="838.0" layoutY="353.0" mnemonicParsing="false" onAction="#pressRegUsers" text="Регистрация пользователя" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="838.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="353.0">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <ComboBox fx:id="comboFilter" layoutX="46.0" layoutY="14.0" prefWidth="150.0" />
-      <ComboBox fx:id="comboGender" layoutX="732.0" layoutY="14.0" prefWidth="150.0" />
-      <Button fx:id="openUpdateClient" layoutX="699.0" layoutY="328.0" mnemonicParsing="false" onAction="#pressUpdateClient" text="Изменить" />
-      <Button layoutX="948.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressSavePDF" text="Save pdf" />
+      <ComboBox fx:id="comboFilter" layoutX="46.0" layoutY="14.0" prefWidth="150.0" AnchorPane.bottomAnchor="361.0" AnchorPane.leftAnchor="46.0" AnchorPane.rightAnchor="866.0" AnchorPane.topAnchor="14.0" />
+      <ComboBox fx:id="comboGender" layoutX="694.0" layoutY="14.0" prefWidth="150.0" AnchorPane.bottomAnchor="361.0" AnchorPane.leftAnchor="694.0" AnchorPane.rightAnchor="218.0" AnchorPane.topAnchor="14.0" />
+      <Button fx:id="openUpdateClient" layoutX="699.0" layoutY="328.0" mnemonicParsing="false" onAction="#pressUpdateClient" text="Изменить" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="699.0" AnchorPane.rightAnchor="293.0" AnchorPane.topAnchor="328.0" />
+      <Button layoutX="974.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressSavePDF" text="Save pdf" AnchorPane.bottomAnchor="361.0" AnchorPane.leftAnchor="974.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="14.0" />
+      <Button layoutX="880.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressSaveExcel" text="Save excel" AnchorPane.bottomAnchor="361.0" AnchorPane.leftAnchor="880.0" AnchorPane.rightAnchor="111.0" AnchorPane.topAnchor="14.0" />
    </children>
-</Pane>
+</AnchorPane>

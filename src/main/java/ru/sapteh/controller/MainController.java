@@ -1,6 +1,7 @@
 package ru.sapteh.controller;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -12,6 +13,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import org.apache.poi.ss.usermodel.Cell;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,6 +21,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbookType;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import ru.sapteh.dao.Dao;
@@ -144,6 +150,69 @@ public class MainController {
         stage.setTitle("Регистрация пользователя");
         stage.setScene(new Scene(root));
         stage.show();
+    }
+    @FXML
+    public void pressSaveExcel(ActionEvent event) throws IOException {
+        FileChooser fileChooser=new FileChooser();
+        fileChooser.setTitle("Выберите путь");
+        File file=fileChooser.showSaveDialog(new Stage());
+        String fileName= file.getAbsolutePath();
+        XSSFWorkbook workbook = new XSSFWorkbook(XSSFWorkbookType.XLSX);
+
+        Sheet sheet = workbook.createSheet("Client");
+        Row header = sheet.createRow(0);
+
+        CellStyle headerStyle = workbook.createCellStyle();
+        headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        XSSFFont font = workbook.createFont();
+        font.setFontHeightInPoints((short)14);
+        headerStyle.setFont(font);
+
+        //Header cell
+        ObservableList<TableColumn<Client, ?>> columns = tableClient.getColumns();
+        int count = 0;
+        for(TableColumn<Client, ?> column : columns){
+            Cell headerCell = header.createCell(count++);
+            headerCell.setCellValue(column.getText());
+            headerCell.setCellStyle(headerStyle);
+        }
+
+        //Next cell (tableViewClient.getItems())
+        for (int i = 0; i < tableClient.getItems().size(); i++) {
+            Row row=sheet.createRow(i+1);
+            Cell id = row.createCell(0);
+            Cell gender = row.createCell(1);
+            Cell lastName = row.createCell(2);
+            Cell firstName = row.createCell(3);
+            Cell patronymic = row.createCell(4);
+            Cell birthday = row.createCell(5);
+            Cell phone = row.createCell(6);
+            Cell email = row.createCell(7);
+            Cell dateRegistration = row.createCell(8);
+            Cell lastDateVisit = row.createCell(9);
+            Cell quantityVisit = row.createCell(10);
+            id.setCellValue(tableClient.getItems().get(i).getId());
+            gender.setCellValue(String.valueOf(tableClient.getItems().get(i).getGender().getCode()));
+            firstName.setCellValue(tableClient.getItems().get(i).getFirstName());
+            lastName.setCellValue(tableClient.getItems().get(i).getLastName());
+            patronymic.setCellValue(tableClient.getItems().get(i).getPatronymic());
+            birthday.setCellValue(tableClient.getItems().get(i).getBirthday().toString());
+            dateRegistration.setCellValue(tableClient.getItems().get(i).getRegistrationDate().toString());
+            email.setCellValue(tableClient.getItems().get(i).getEmail());
+            phone.setCellValue(tableClient.getItems().get(i).getPhone());
+            quantityVisit.setCellValue(tableClient.getItems().get(i).getServices().size());
+            Set<ClientService> services = tableClient.getItems().get(i).getServices();
+            if (services.size() != 0) {
+                lastDateVisit.setCellValue(services.stream().max(Comparator.comparing(ClientService::getStartTime)).get().getStartTime().toString());
+            }
+        }
+
+        FileOutputStream outputStream = new FileOutputStream(fileName);
+        workbook.write(outputStream);
+        workbook.close();
+        outputStream.close();
     }
 
     @FXML
