@@ -41,5 +41,6 @@
       <ComboBox fx:id="comboFilter" layoutX="46.0" layoutY="14.0" prefWidth="150.0" />
       <ComboBox fx:id="comboGender" layoutX="732.0" layoutY="14.0" prefWidth="150.0" />
       <Button fx:id="openUpdateClient" layoutX="699.0" layoutY="328.0" mnemonicParsing="false" onAction="#pressUpdateClient" text="Изменить" />
+      <Button layoutX="948.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressSavePDF" text="Save pdf" />
    </children>
 </Pane>
