@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sapteh.controller.MainController">
    <children>
@@ -43,5 +49,6 @@
       <Button fx:id="openUpdateClient" layoutX="699.0" layoutY="328.0" mnemonicParsing="false" onAction="#pressUpdateClient" text="Изменить" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="699.0" AnchorPane.rightAnchor="293.0" AnchorPane.topAnchor="328.0" />
       <Button layoutX="974.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressSavePDF" text="Save pdf" AnchorPane.bottomAnchor="361.0" AnchorPane.leftAnchor="974.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="14.0" />
       <Button layoutX="880.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressSaveExcel" text="Save excel" AnchorPane.bottomAnchor="361.0" AnchorPane.leftAnchor="880.0" AnchorPane.rightAnchor="111.0" AnchorPane.topAnchor="14.0" />
+      <Button fx:id="buttonDelete" layoutX="623.0" layoutY="328.0" mnemonicParsing="false" text="Удалить" />
    </children>
 </AnchorPane>

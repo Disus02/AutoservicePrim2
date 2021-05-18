@@ -91,6 +91,8 @@ public class MainController {
     private ComboBox<Character> comboGender;
     @FXML
     private Button openUpdateClient;
+    @FXML
+    private Button buttonDelete;
 
     private int sizeClients;
     private int comboBoxValue;
@@ -103,7 +105,7 @@ public class MainController {
     public static String email;
     public static Date birthday;
     public static char gender;
-    private Client client;
+    public static Client client;
 
     @FXML
     public void initialize(){
@@ -122,7 +124,20 @@ public class MainController {
                 (observable, oldValue, newValue) -> {
                         clientShowDetails(newValue);
 
-                });
+        });
+        deleteClient();
+        buttonDelete.setOnAction(event -> {
+            try {
+                Parent root=FXMLLoader.load(getClass().getResource("/view/warrior.fxml"));
+                Stage stage=new Stage();
+                stage.setScene(new Scene(root));
+                stage.setTitle("WARRIOR");
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
     }
     @FXML
     public void pressUpdateClient() throws IOException {
@@ -282,7 +297,6 @@ public class MainController {
         comboPaged.setItems(options);
         comboPaged.setValue(options.get(0));
         comboPaged.valueProperty().addListener((obj,oldValue,newValue)-> {
-
             comboBoxValue = comboPaged.getValue();
             if (comboBoxValue>sizeClients){
                 comboBoxValue=sizeClients;
@@ -408,12 +422,9 @@ public class MainController {
 
     }
     private void deleteClient(){
-        SessionFactory factory=new Configuration().configure().buildSessionFactory();
-        Dao<Client,Integer> clientService=new ClientDaoImpl(factory);
         tableClient.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldValue, newValue) -> {
             client=newValue;
         }));
-        clientService.delete(client);
     }
 
 
