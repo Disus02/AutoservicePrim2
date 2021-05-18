@@ -103,6 +103,7 @@ public class MainController {
     public static String email;
     public static Date birthday;
     public static char gender;
+    private Client client;
 
     @FXML
     public void initialize(){
@@ -333,40 +334,39 @@ public class MainController {
         tableClient.setItems(clients);
     }
     public void searchClient(ObservableList<Client> clients){
-        FilteredList<Client> filterList = new FilteredList<>(clients, p -> true);
+        FilteredList<Client> filteredList=new FilteredList<>(clients,p->true);
         comboFilter.setItems(FXCollections.observableArrayList("FIO","phone","email"));
-            txtSearch.textProperty().addListener((obj, oldValue, newValue) -> {
-                filterList.setPredicate(client -> {
-                    if (newValue == null || newValue.isEmpty()){
+        txtSearch.textProperty().addListener((obj,oldValue,newValue)->{
+            filteredList.setPredicate(client -> {
+                if (newValue==null||newValue.isEmpty()){
+                    return true;
+                }
+                String lowerCase=newValue.toLowerCase();
+                if (comboFilter.getValue().equals("FIO")){
+                    if (client.getFirstName().toLowerCase().contains(lowerCase)){
                         return true;
                     }
-                    String lowerCaseFilter = newValue.toLowerCase();
-                    if (comboFilter.getValue().equals("FIO")){
-                        if (client.getFirstName().toLowerCase().contains(lowerCaseFilter)){
-                            return true;
-                        }
-                        else if (client.getLastName().toLowerCase().contains(lowerCaseFilter)){
-                            return true;
-                        } else if (client.getPatronymic().toLowerCase().contains(lowerCaseFilter)){
-                            return true;
-                        }
+                    if (client.getLastName().toLowerCase().contains(lowerCase)){
+                        return true;
                     }
-                    if (comboFilter.getValue().equals("phone")){
-                        if (client.getPhone().toLowerCase().contains(lowerCaseFilter)){
-                            return true;
-                        }
+                    if (client.getPatronymic().toLowerCase().contains(lowerCase)){
+                        return true;
                     }
-                    if (comboFilter.getValue().equals("email")){
-                        if (client.getEmail().toLowerCase().contains(lowerCaseFilter)){
-                            return true;
-                        }
+                }
+                if (comboFilter.getValue().equals("phone")){
+                    if (client.getPhone().toLowerCase().contains(lowerCase)){
+                        return true;
                     }
-                    return false;
-                });
+                }
+                if (comboFilter.getValue().equals("email")){
+                    if (client.getEmail().toLowerCase().contains(lowerCase)){
+                        return true;
+                    }
+                }
+                return false;
             });
-        SortedList<Client> sortedList = new SortedList<>(filterList);
-        sortedList.comparatorProperty().bind(tableClient.comparatorProperty());
-        tableClient.setItems(sortedList);
+            tableClient.setItems(filteredList);
+        });
     }
 
     private void sortGender(){
@@ -406,6 +406,14 @@ public class MainController {
          birthday=null;
         gender=0;
 
+    }
+    private void deleteClient(){
+        SessionFactory factory=new Configuration().configure().buildSessionFactory();
+        Dao<Client,Integer> clientService=new ClientDaoImpl(factory);
+        tableClient.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldValue, newValue) -> {
+            client=newValue;
+        }));
+        clientService.delete(client);
     }
 
 
